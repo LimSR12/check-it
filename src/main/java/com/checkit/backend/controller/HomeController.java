@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class HomeController {
+    
     @GetMapping("/")
     public APIResponse<?> home(){
         return APIResponse.success("Welcome to Check-It!");
