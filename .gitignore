@@ -60,6 +60,8 @@ Thumbs.db
 logs/
 *.log
 
+# Upload file directory
+/uploads/*
 ---
 
 ### React (Frontend) ###

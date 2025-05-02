@@ -2,7 +2,10 @@ package com.checkit.backend.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 @Entity
@@ -21,16 +24,18 @@ public class Post {
     @JoinColumn(name = "member_id", nullable = false) // FK 이름 member_id
     private Member member;      // 작성자
 
-    @Column(nullable = false)
+    @Column(columnDefinition = "TEXT", nullable = false)
     private String title;
 
-    @Column(columnDefinition = "TEXT", nullable = false)
-    private String description;
+    @Column(columnDefinition = "TEXT", length = 1000)
+    private String content;
 
-    @Column(nullable = false)
-    private LocalDateTime createdAt;
+    private String imageUrl;    // /images/파일명.jpg
 
-    @Column(nullable = false)
-    private LocalDateTime updatedAt;
+    @CreationTimestamp
+    private Timestamp createdAt;
+
+    @UpdateTimestamp
+    private Timestamp updatedAt;
 
 }
