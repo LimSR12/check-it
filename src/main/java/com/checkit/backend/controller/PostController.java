@@ -1,6 +1,7 @@
 package com.checkit.backend.controller;
 
 import com.checkit.backend.dto.PostResponseDto;
+import com.checkit.backend.dto.PostUpdateRequest;
 import com.checkit.backend.dto.PostUploadRequest;
 import com.checkit.backend.global.response.APIResponse;
 import com.checkit.backend.service.PostService;
@@ -43,8 +44,16 @@ public class PostController {
     }
 
     @PatchMapping("/{id}")
-    public APIResponse<?> updatePost(@PathVariable Long id){
-        return APIResponse.success("");
+    public APIResponse<?> updatePost(
+            @PathVariable Long id,
+            @ModelAttribute PostUpdateRequest request
+    ){
+        try{
+            postService.updatePost(id, request);
+            return APIResponse.success("게시글 수정 완료");
+        } catch (Exception e) {
+            return APIResponse.fail("게시글 수정 실패", e.getMessage());
+        }
     }
 
     @DeleteMapping("/{id}")

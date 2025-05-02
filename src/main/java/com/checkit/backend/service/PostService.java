@@ -3,6 +3,7 @@ package com.checkit.backend.service;
 import com.checkit.backend.domain.Member;
 import com.checkit.backend.domain.Post;
 import com.checkit.backend.dto.PostResponseDto;
+import com.checkit.backend.dto.PostUpdateRequest;
 import com.checkit.backend.dto.PostUploadRequest;
 import com.checkit.backend.repository.MemberRepository;
 import com.checkit.backend.repository.PostRepository;
@@ -86,6 +87,32 @@ public class PostService {
                 .nickname(post.getMember().getNickname())
                 .createdAt(post.getCreatedAt().toLocalDateTime())
                 .build();
+    }
+
+    @Transactional
+    public void updatePost(Long id, PostUpdateRequest request) throws IOException{
+        Post post = postRepository.findById(id)
+                .orElseThrow(()->new IllegalArgumentException("게시글이 존재하지 않습니다."));
+
+        post.setTitle(request.getTitle());
+        post.setContent(request.getContent());
+        //post.setUpdatedAt();
+
+        MultipartFile image = request.getImage();
+        if(image != null && !image.isEmpty()){
+            String ext = image.getOriginalFilename().substring(image.getOriginalFilename().lastIndexOf("."));
+            String storedFilename = UUID.randomUUID() + ext;
+
+            File uploadPath = new File(uploadDir);
+            if (!uploadPath.exists()) {
+                uploadPath.mkdirs();
+            }
+
+            File dest = new File(uploadDir + storedFilename);
+            image.transferTo(dest);
+
+            post.setImageUrl("/images/" + storedFilename);
+        }
     }
 
     @Transactional
