@@ -19,7 +19,7 @@ public class PostController {
         return APIResponse.success("");
     }
 
-    @GetMapping("")
+    @GetMapping("/{id}")
     public APIResponse<?> getPost(){
         return APIResponse.success("");
     }
