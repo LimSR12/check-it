@@ -44,7 +44,7 @@ public class PostController {
     }
 
     @PatchMapping("/{id}")
-    public APIResponse<?> updatePost(
+    public APIResponse<String> updatePost(
             @PathVariable Long id,
             @ModelAttribute PostUpdateRequest request
     ){
