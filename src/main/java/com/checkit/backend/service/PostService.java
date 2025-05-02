@@ -6,6 +6,7 @@ import com.checkit.backend.dto.PostResponseDto;
 import com.checkit.backend.dto.PostUploadRequest;
 import com.checkit.backend.repository.MemberRepository;
 import com.checkit.backend.repository.PostRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -76,7 +77,7 @@ public class PostService {
 
     public PostResponseDto getPostById(Long id){
         Post post = postRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다."));
+                .orElseThrow(() -> new IllegalArgumentException("게시글이 존재하지 않습니다."));
         return PostResponseDto.builder()
                 .id(post.getId())
                 .title(post.getTitle())
@@ -85,5 +86,12 @@ public class PostService {
                 .nickname(post.getMember().getNickname())
                 .createdAt(post.getCreatedAt().toLocalDateTime())
                 .build();
+    }
+
+    @Transactional
+    public void deletePost(Long id){
+        Post post = postRepository.findById(id)
+                .orElseThrow(()->new IllegalArgumentException("게시글이 존재하지 않습니다."));
+        postRepository.delete(post);
     }
 }

@@ -48,7 +48,8 @@ public class PostController {
     }
 
     @DeleteMapping("/{id}")
-    public APIResponse<?> deletePost(@PathVariable Long id){
-        return APIResponse.success("");
+    public APIResponse<String> deletePost(@PathVariable Long id){
+        postService.deletePost(id);
+        return APIResponse.success("게시글이 삭제되었습니다.");
     }
 }
