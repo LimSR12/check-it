@@ -27,7 +27,7 @@ public class Post {
     @Column(columnDefinition = "TEXT", nullable = false)
     private String title;
 
-    @Column(columnDefinition = "TEXT", nullable = false)
+    @Column(columnDefinition = "TEXT", length = 1000)
     private String content;
 
     @CreationTimestamp
