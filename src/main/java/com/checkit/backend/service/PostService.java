@@ -73,4 +73,17 @@ public class PostService {
                 )
                 .collect(Collectors.toList());
     }
+
+    public PostResponseDto getPostById(Long id){
+        Post post = postRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다."));
+        return PostResponseDto.builder()
+                .id(post.getId())
+                .title(post.getTitle())
+                .content(post.getContent())
+                .imageUrl(post.getImageUrl())
+                .nickname(post.getMember().getNickname())
+                .createdAt(post.getCreatedAt().toLocalDateTime())
+                .build();
+    }
 }

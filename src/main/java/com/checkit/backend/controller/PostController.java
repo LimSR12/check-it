@@ -38,8 +38,8 @@ public class PostController {
     }
 
     @GetMapping("/{id}")
-    public APIResponse<?> getPost(@PathVariable Long id){
-        return APIResponse.success("");
+    public APIResponse<PostResponseDto> getPost(@PathVariable Long id){
+        return APIResponse.success(postService.getPostById(id));
     }
 
     @PatchMapping("/{id}")
