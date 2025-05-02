@@ -27,6 +27,8 @@ public class Post {
     @Column(columnDefinition = "TEXT", nullable = false)
     private String title;
 
+    private String imageUrl;    // /images/파일명.jpg
+
     @Column(columnDefinition = "TEXT", length = 1000)
     private String content;
 
