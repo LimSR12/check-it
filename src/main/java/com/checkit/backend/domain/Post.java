@@ -28,7 +28,7 @@ public class Post {
     private String title;
 
     @Column(columnDefinition = "TEXT", nullable = false)
-    private String description;
+    private String content;
 
     @CreationTimestamp
     private Timestamp createdAt;
