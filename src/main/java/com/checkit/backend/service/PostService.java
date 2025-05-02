@@ -2,6 +2,7 @@ package com.checkit.backend.service;
 
 import com.checkit.backend.domain.Member;
 import com.checkit.backend.domain.Post;
+import com.checkit.backend.dto.PostResponseDto;
 import com.checkit.backend.dto.PostUploadRequest;
 import com.checkit.backend.repository.MemberRepository;
 import com.checkit.backend.repository.PostRepository;
@@ -11,7 +12,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -55,5 +58,19 @@ public class PostService {
                 .build();
         postRepository.save(post);
         return post.getId();
+    }
+
+    public List<PostResponseDto> getAllPosts(){
+        return postRepository.findAll().stream()
+                .map(post -> PostResponseDto.builder()
+                        .id(post.getId())
+                        .title(post.getTitle())
+                        .content(post.getContent())
+                        .imageUrl(post.getImageUrl())
+                        .nickname(post.getMember().getNickname()) // 작성자 정보 일부 포함
+                        .createdAt(post.getCreatedAt().toLocalDateTime())
+                        .build()
+                )
+                .collect(Collectors.toList());
     }
 }

@@ -1,5 +1,6 @@
 package com.checkit.backend.controller;
 
+import com.checkit.backend.dto.PostResponseDto;
 import com.checkit.backend.dto.PostUploadRequest;
 import com.checkit.backend.global.response.APIResponse;
 import com.checkit.backend.service.PostService;
@@ -8,6 +9,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/posts")
@@ -30,8 +32,9 @@ public class PostController {
     }
 
     @GetMapping("")
-    public APIResponse<?> getAllPost(){
-        return APIResponse.success("");
+    public APIResponse<List<PostResponseDto>> getAllPost(){
+        List<PostResponseDto> posts = postService.getAllPosts();
+        return APIResponse.success(posts);
     }
 
     @GetMapping("/{id}")
