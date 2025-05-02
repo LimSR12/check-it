@@ -17,10 +17,13 @@ public class PostController {
 
     // 이 API는 multipart/form-data 형식의 요청만 받겠다는 뜻
     @PostMapping(value = "",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public APIResponse<String> uploadPost(@ModelAttribute PostUploadRequest request) {
+    public APIResponse<String> uploadPost(
+            @ModelAttribute PostUploadRequest request,
+            @RequestParam("memberId") Long memberId
+    ) {
         try{
-            Long id = postService.savePost(request);
-            return APIResponse.success("업로드 성공, id:" + id);
+            Long PostId = postService.savePost(request, memberId);
+            return APIResponse.success("업로드 성공, id:" + PostId);
         }catch(Exception e){
             return APIResponse.fail("게시글 업로드 실패: ", e.getMessage());
         }

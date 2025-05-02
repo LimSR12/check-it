@@ -1,7 +1,9 @@
 package com.checkit.backend.service;
 
+import com.checkit.backend.domain.Member;
 import com.checkit.backend.domain.Post;
 import com.checkit.backend.dto.PostUploadRequest;
+import com.checkit.backend.repository.MemberRepository;
 import com.checkit.backend.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,9 +17,15 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class PostService {
     private final PostRepository postRepository;
-    private final String uploadDir = "uploads/";    // 이미지 저장될 경로
+    private final MemberRepository memberRepository;
 
-    public Long savePost(PostUploadRequest request ) throws IOException {
+    private final String uploadDir = System.getProperty("user.dir") + "/uploads/"; // 이미지 저장될 경로
+
+    public Long savePost(PostUploadRequest request, Long memberId) throws IOException {
+        File uploadPath = new File(uploadDir);
+        if (!uploadPath.exists()) {
+            uploadPath.mkdirs(); // 디렉토리가 없으면 생성
+        }
 
         MultipartFile[] images = request.getImages();
         MultipartFile image = images[0];
@@ -29,14 +37,18 @@ public class PostService {
                 String ext = image.getOriginalFilename().substring(image.getOriginalFilename().lastIndexOf("."));
                 // 이미지 파일명 랜덤 uuid 값을 이용해 생성
                 storedFilename = UUID.randomUUID() + ext;
-                File uploadPath = new File(uploadDir + storedFilename);
-                image.transferTo(uploadPath);
+                File dest = new File(uploadDir + storedFilename);
+                image.transferTo(dest);
             } else {
                 throw new IllegalArgumentException("파일 이름이 유효하지 않습니다.");
             }
         }
 
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 사용자 정보를 찾을 수 없습니다."));
+
         Post post = Post.builder()
+                .member(member)
                 .title(request.getTitle())
                 .content(request.getContent())
                 .imageUrl(storedFilename != null ? "/images/" + storedFilename : null)
