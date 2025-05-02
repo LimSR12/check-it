@@ -20,17 +20,17 @@ public class PostController {
     }
 
     @GetMapping("/{id}")
-    public APIResponse<?> getPost(){
+    public APIResponse<?> getPost(@PathVariable Long id){
         return APIResponse.success("");
     }
 
     @PatchMapping("/{id}")
-    public APIResponse<?> updatePost(){
+    public APIResponse<?> updatePost(@PathVariable Long id){
         return APIResponse.success("");
     }
 
     @DeleteMapping("/{id}")
-    public APIResponse<?> deletePost(){
+    public APIResponse<?> deletePost(@PathVariable Long id){
         return APIResponse.success("");
     }
 }
